@@ -16,6 +16,7 @@
       <PackageReference Include="Akka.Cluster.Hosting" Version="1.5.15" />
       <PackageReference Include="Akka.Cluster.Sharding" Version="1.5.16" />
       <PackageReference Include="Akka.Persistence.PostgreSql.Hosting" Version="1.5.15.1" />
+      <PackageReference Include="Akka.Serialization.MessagePack" Version="1.1.0" />
       <PackageReference Include="Dapper" Version="2.1.28" />
       <PackageReference Include="Dapper.AOT" Version="1.0.31" />
     </ItemGroup>

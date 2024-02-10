@@ -36,11 +36,23 @@ public static class AkkaSetup
                 };
                 var clientMessageExtractor = new ClientMessageExtractor(50);
                 akkaBuilder
+                    .AddHocon(
+                        $@"
+akka {{
+  actor {{
+    serializers {{
+      messagepack = ""Akka.Serialization.MessagePack.MsgPackSerializer, Akka.Serialization.MessagePack""
+    }}
+    serialization-bindings {{
+      ""System.Object"" = messagepack
+    }}
+  }}
+}}".ToHocon(), HoconAddMode.Prepend)
                     .ConfigureLoggers(setup =>
                     {
-#if !DEBUG
-                        setup.ClearLoggers();
-#endif
+// #if !DEBUG
+//                         setup.ClearLoggers();
+// #endif
                     })
                     .WithClustering(clusterOptions)
                     .WithRemoting(remoteOptions)
@@ -60,10 +72,12 @@ public static class AkkaSetup
                     .WithPostgreSqlPersistence(journal =>
                     {
                         journal.ConnectionString = connString;
+                        journal.Serializer = "messagepack";
                     },
                     snapshot =>
                     {
                         snapshot.ConnectionString = connString;
+                        snapshot.Serializer = "messagepack";
                     });
 
 

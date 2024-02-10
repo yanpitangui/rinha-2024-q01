@@ -1,5 +1,6 @@
 ﻿using Akka.Actor;
 using Akka.Persistence;
+using MessagePack;
 
 namespace RinhaApi.Actors;
 
@@ -17,7 +18,7 @@ public sealed class Client : ReceivePersistentActor
         {
             if (o is Initialize init)
             {
-                Persist(init, InitializeHandler);
+                PersistAsync(init, InitializeHandler);
             }
             else
             {
@@ -70,8 +71,6 @@ public sealed class Client : ReceivePersistentActor
         });
         
         Command<Initialize>(_ => {});
-        
-        Command<SaveSnapshotSuccess>(_ => { });
         
     }
 
@@ -128,45 +127,104 @@ public record ClientState
     public List<Transacao> Transacoes { get; init; } = new();
 }
 
-public record Initialize(string ClientId, int Saldo, int Limite) : IWithClientId;
+public record Initialize : IWithClientId
+{
+    public Initialize(string ClientId, int Saldo, int Limite)
+    {
+        this.ClientId = ClientId;
+        this.Saldo = Saldo;
+        this.Limite = Limite;
+    }
 
+    [Key(0)]
+    public string ClientId { get; init; }
+    
+    [Key(1)]
+    public int Saldo { get; init; }
+    
+    [Key(2)]
+    public int Limite { get; init; }
+}
+
+[MessagePackObject]
 public record CreateTransacao: IWithClientId
 {
+    [Key(0)]
     public int Valor { get; set; }
+    
+    [Key(1)]
     public TipoTransacao Tipo { get; set; }
+    
+    [Key(2)]
     public string Descricao { get; set; } = null!;
     
+    [Key(3)]
     public string ClientId { get; init; } = null!;
+    
+    [Key(4)]
     public DateTimeOffset RealizadaEm { get; set; }
 }
 
-public record GetExtrato(string ClientId) : IWithClientId;
+[MessagePackObject]
+public record GetExtrato: IWithClientId
+{
+    protected GetExtrato(){}
 
+    public GetExtrato(string clientId)
+    {
+        ClientId = clientId;
+    }
+    
+    [Key(0)]
+    public string ClientId { get; init; }
+}
 
+[MessagePackObject]
 public record CreateTransacaoResponse
 {
+    [Key(0)]
     public int Limite { get; init; }
+    
+    [Key(1)]
     public int Saldo { get; init; }
 }
 
+[MessagePackObject]
 public record GetExtratoResponse
 {
+    [Key(0)]
     public required Saldo Saldo { get; set; }
+    
+    [Key(1)]
     public required Transacao[] UltimasTransacoes { get; set; }
 }
 
+[MessagePackObject]
 public record Saldo
 {
+    [Key(0)]
     public int Total { get; set; }
+    
+    [Key(1)]
     public DateTime DataExtrato { get; set; }
+    
+    [Key(2)]
     public int Limite { get; set; }
 }
 
+[MessagePackObject]
 public record Transacao
 {
+    [Key(0)]
     public int Valor { get; set; }
+    
+    [Key(1)]
     public TipoTransacao Tipo { get; set; }
+    
+    [Key(2)]
     public required string Descricao { get; set; }
+    
+    [Key(3)]
     public DateTimeOffset RealizadaEm { get; set; }
 }
 
