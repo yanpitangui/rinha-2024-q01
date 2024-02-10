@@ -4,8 +4,6 @@
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "todos",
       "applicationUrl": "http://localhost:9999",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
