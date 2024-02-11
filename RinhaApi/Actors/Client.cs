@@ -188,7 +188,7 @@ public sealed record CreateTransacaoResponse
 }
 
 [MessagePackObject]
-public sealed record GetExtratoResponse
+public record struct GetExtratoResponse
 {
     [Key(0)]
     public required Saldo Saldo { get; set; }

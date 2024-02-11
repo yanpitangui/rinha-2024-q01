@@ -4,13 +4,7 @@ namespace RinhaApi;
 
 
 
-public sealed record CreateTransacaoRequest
-{
-    public object Valor { get; init; } = null!;
-    public string Descricao { get; init; } = null!;
-    public string Tipo { get; init; } = null!;
-}
-
+public record struct CreateTransacaoRequest(object Valor, string Descricao, string Tipo);
 
 [JsonConverter(typeof(JsonStringEnumConverter<TipoTransacao>))]
 public enum TipoTransacao
