@@ -1,4 +1,5 @@
-﻿using Akka.Cluster.Hosting;
+﻿using System.Net;
+using Akka.Cluster.Hosting;
 using Akka.Hosting;
 using Akka.Persistence.PostgreSql.Hosting;
 using Akka.Remote.Hosting;
@@ -14,6 +15,9 @@ public static class AkkaSetup
 
         hostBuilder.ConfigureServices((ctx, services) =>
         {
+            var clusterConfig = ctx.Configuration.GetSection("Cluster");
+
+            var clusterConfigOptions = clusterConfig.Get<ClusterOptions>();
             
             var defaultShardOptions = new ShardOptions()
             {
@@ -25,13 +29,13 @@ public static class AkkaSetup
             {
                 var remoteOptions = new RemoteOptions
                 {
-                    HostName = "localhost",
-                    Port = 5213, 
+                    HostName = clusterConfigOptions!.Ip,
+                    Port = clusterConfigOptions.Port, 
                 };
                 var clusterOptions = new Akka.Cluster.Hosting.ClusterOptions
                 {
                     MinimumNumberOfMembers = 1,
-                    SeedNodes = new[] { $"akka.tcp://{actorSystemName}@localhost:5213" },
+                    SeedNodes = clusterConfigOptions.Seeds,
                     Roles = new[] { actorSystemName }
                 };
                 var clientMessageExtractor = new ClientMessageExtractor(50);
