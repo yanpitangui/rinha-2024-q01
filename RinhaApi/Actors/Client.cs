@@ -41,7 +41,6 @@ public sealed class Client : ReceivePersistentActor
                 return;
             }
             
-            msg.RealizadaEm = DateTimeOffset.Now;
             PersistAsync(msg, persisted =>
             {
                 var sender = Sender;
@@ -150,19 +149,19 @@ public record struct Initialize : IWithClientId
 public sealed record CreateTransacao: IWithClientId
 {
     [Key(0)]
-    public int Valor { get; set; }
+    public int Valor { get; init; }
     
     [Key(1)]
-    public TipoTransacao Tipo { get; set; }
+    public TipoTransacao Tipo { get; init; }
     
     [Key(2)]
-    public string Descricao { get; set; } = null!;
+    public string Descricao { get; init; } = null!;
     
     [Key(3)]
     public string ClientId { get; init; } = null!;
     
     [Key(4)]
-    public DateTimeOffset RealizadaEm { get; set; }
+    public DateTimeOffset RealizadaEm { get; init; }
 }
 
 [MessagePackObject]
