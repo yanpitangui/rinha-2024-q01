@@ -66,7 +66,7 @@ public sealed class Client : ReceivePersistentActor
                     DataExtrato = DateTime.Now,
                     Limite = _state.Limite
                 },
-                UltimasTransacoes = _state.Transacoes.OrderByDescending(x => x.RealizadaEm).Take(10).ToArray()
+                UltimasTransacoes = _state.Transacoes.TakeLast(10).OrderByDescending(x => x.RealizadaEm)
             });
         });
         
@@ -127,7 +127,7 @@ public sealed record ClientState
     public List<Transacao> Transacoes { get; init; } = new();
 }
 
-public sealed record Initialize : IWithClientId
+public record struct Initialize : IWithClientId
 {
     public Initialize(string ClientId, int Saldo, int Limite)
     {
@@ -168,8 +168,6 @@ public sealed record CreateTransacao: IWithClientId
 [MessagePackObject]
 public sealed record GetExtrato: IWithClientId
 {
-    protected GetExtrato(){}
-
     public GetExtrato(string clientId)
     {
         ClientId = clientId;
@@ -196,11 +194,11 @@ public sealed record GetExtratoResponse
     public required Saldo Saldo { get; set; }
     
     [Key(1)]
-    public required Transacao[] UltimasTransacoes { get; set; }
+    public required IEnumerable<Transacao> UltimasTransacoes { get; set; }
 }
 
 [MessagePackObject]
-public sealed record Saldo
+public record struct Saldo
 {
     [Key(0)]
     public int Total { get; set; }
@@ -213,7 +211,7 @@ public sealed record Saldo
 }
 
 [MessagePackObject]
-public sealed record Transacao
+public record struct Transacao
 {
     [Key(0)]
     public int Valor { get; set; }
