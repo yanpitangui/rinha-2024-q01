@@ -4,7 +4,7 @@ namespace RinhaApi;
 
 
 
-public record CreateTransacaoRequest
+public sealed record CreateTransacaoRequest
 {
     public object Valor { get; init; } = null!;
     public string Descricao { get; init; } = null!;

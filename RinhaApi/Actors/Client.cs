@@ -31,7 +31,7 @@ public sealed class Client : ReceivePersistentActor
     }
 
 
-    public void Initialized()
+    private void Initialized()
     {
         Command<CreateTransacao>(msg =>
         {
@@ -120,14 +120,14 @@ public sealed class Client : ReceivePersistentActor
     }
 }
 
-public record ClientState
+public sealed record ClientState
 {
     public int Saldo { get; set; }
     public int Limite { get; init; }
     public List<Transacao> Transacoes { get; init; } = new();
 }
 
-public record Initialize : IWithClientId
+public sealed record Initialize : IWithClientId
 {
     public Initialize(string ClientId, int Saldo, int Limite)
     {
@@ -147,7 +147,7 @@ public record Initialize : IWithClientId
 }
 
 [MessagePackObject]
-public record CreateTransacao: IWithClientId
+public sealed record CreateTransacao: IWithClientId
 {
     [Key(0)]
     public int Valor { get; set; }
@@ -166,7 +166,7 @@ public record CreateTransacao: IWithClientId
 }
 
 [MessagePackObject]
-public record GetExtrato: IWithClientId
+public sealed record GetExtrato: IWithClientId
 {
     protected GetExtrato(){}
 
@@ -180,7 +180,7 @@ public record GetExtrato: IWithClientId
 }
 
 [MessagePackObject]
-public record CreateTransacaoResponse
+public sealed record CreateTransacaoResponse
 {
     [Key(0)]
     public int Limite { get; init; }
@@ -190,7 +190,7 @@ public record CreateTransacaoResponse
 }
 
 [MessagePackObject]
-public record GetExtratoResponse
+public sealed record GetExtratoResponse
 {
     [Key(0)]
     public required Saldo Saldo { get; set; }
@@ -200,7 +200,7 @@ public record GetExtratoResponse
 }
 
 [MessagePackObject]
-public record Saldo
+public sealed record Saldo
 {
     [Key(0)]
     public int Total { get; set; }
@@ -213,7 +213,7 @@ public record Saldo
 }
 
 [MessagePackObject]
-public record Transacao
+public sealed record Transacao
 {
     [Key(0)]
     public int Valor { get; set; }

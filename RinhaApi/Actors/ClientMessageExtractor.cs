@@ -2,7 +2,7 @@
 
 namespace RinhaApi.Actors;
 
-public class ClientMessageExtractor : HashCodeMessageExtractor
+public sealed class ClientMessageExtractor : HashCodeMessageExtractor
 {
     public ClientMessageExtractor(int maxNumberOfShards) : base(maxNumberOfShards)
     {

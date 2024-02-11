@@ -31,4 +31,4 @@ public sealed class ClientInitializer(IActorRef shardRegion, string connString) 
 }
 
 
-public record InitializeInfo(int Id, int Limite, int Saldo);
+public sealed record InitializeInfo(int Id, int Limite, int Saldo);

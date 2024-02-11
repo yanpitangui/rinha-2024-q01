@@ -10,6 +10,7 @@
         <ServerGarbageCollection>true</ServerGarbageCollection>
         <TieredPGO>true</TieredPGO>
         <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Dapper.AOT</InterceptorsPreviewNamespaces>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +20,12 @@
       <PackageReference Include="Akka.Serialization.MessagePack" Version="1.1.0" />
       <PackageReference Include="Dapper" Version="2.1.28" />
       <PackageReference Include="Dapper.AOT" Version="1.0.31" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
