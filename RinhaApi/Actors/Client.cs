@@ -35,7 +35,7 @@ public sealed class Client : ReceivePersistentActor
     {
         Command<CreateTransacao>(msg =>
         {
-            if(msg.Tipo == TipoTransacao.d && _state.Saldo - msg.Valor < 0)
+            if(msg.Tipo == TipoTransacao.d && (_state.Saldo - msg.Valor < -_state.Limite))
             {
                 Sender.Tell(ActionErrors.LimiteExcedido);
                 return;
