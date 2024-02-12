@@ -51,7 +51,7 @@ akka {{
       ""System.Object"" = messagepack
     }}
   }}
-}}".ToHocon(), HoconAddMode.Prepend)
+}}", HoconAddMode.Prepend)
                     .ConfigureLoggers(setup =>
                     {
 // #if !DEBUG
