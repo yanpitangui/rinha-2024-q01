@@ -43,13 +43,12 @@ public sealed class Client : ReceivePersistentActor
             
             PersistAsync(msg, persisted =>
             {
-                var sender = Sender;
-                CreateTransacaoHandler(persisted);
-                sender.Tell(new CreateTransacaoResponse
-                {
-                    Limite = _state.Limite,
-                    Saldo = _state.Saldo
-                });
+            });
+            CreateTransacaoHandler(msg);
+            Sender.Tell(new CreateTransacaoResponse
+            {
+                Limite = _state.Limite,
+                Saldo = _state.Saldo
             });
 
         });
