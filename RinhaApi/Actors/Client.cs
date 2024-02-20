@@ -41,7 +41,7 @@ public sealed class Client : ReceivePersistentActor
                 return;
             }
             
-            PersistAsync(msg, persisted =>
+            PersistAsync(msg, static _ =>
             {
             });
             CreateTransacaoHandler(msg);
@@ -103,6 +103,11 @@ public sealed class Client : ReceivePersistentActor
             _ => throw new ArgumentOutOfRangeException()
         };
         
+        if (_state.Transacoes.Count == 10)
+        {
+            _state.Transacoes.RemoveAt(0);
+        }
+        
         _state.Transacoes.Add(new Transacao
         {
             Tipo = create.Tipo,
@@ -110,6 +115,8 @@ public sealed class Client : ReceivePersistentActor
             RealizadaEm = create.RealizadaEm,
             Valor = create.Valor
         });
+
+
     }
     
     public static Props Props(string persistenceId)
@@ -122,10 +129,10 @@ public sealed record ClientState
 {
     public int Saldo { get; set; }
     public int Limite { get; init; }
-    public List<Transacao> Transacoes { get; init; } = new();
+    public List<Transacao> Transacoes { get; init; } = new(10);
 }
 
-public record struct Initialize : IWithClientId
+public record Initialize : IWithClientId
 {
     public Initialize(string ClientId, int Saldo, int Limite)
     {
@@ -186,7 +193,7 @@ public sealed record CreateTransacaoResponse
 }
 
 [MessagePackObject]
-public record struct GetExtratoResponse
+public record GetExtratoResponse
 {
     [Key(0)]
     public required Saldo Saldo { get; set; }

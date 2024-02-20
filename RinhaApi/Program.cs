@@ -61,14 +61,14 @@ clientesApi.MapGet("/{id}/extrato", async (string id, ActorRegistry registry) =>
     var region = registry.Get<Client>();
     var result = await region.Ask(new GetExtrato(id));
     if (result is ActionErrors) return Results.NotFound();
-    return Results.Ok(result as GetExtratoResponse?);
+    return Results.Ok(result as GetExtratoResponse);
 });
 
 
 app.Run();
 
 
-[JsonSerializable(typeof(GetExtratoResponse?))]
+[JsonSerializable(typeof(GetExtratoResponse))]
 [JsonSerializable(typeof(CreateTransacaoRequest))]
 [JsonSerializable(typeof(CreateTransacaoResponse))]
 
