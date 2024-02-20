@@ -64,7 +64,7 @@ public sealed class Client : ReceivePersistentActor
                     DataExtrato = DateTime.Now,
                     Limite = _state.Limite
                 },
-                UltimasTransacoes = _state.Transacoes.TakeLast(10).OrderByDescending(x => x.RealizadaEm)
+                UltimasTransacoes = _state.Transacoes.OrderByDescending(x => x.RealizadaEm)
             });
         });
         
